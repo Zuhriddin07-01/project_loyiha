@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero-section" style="margin-top: -76px;">
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row align-items-center">
+      <div class="col-lg-7 fade-in">
+        <div class="hero-badge">
+          <i class="bi bi-patch-check-fill"></i> Trusted Healthcare Platform
+        </div>
+        <h1 class="hero-title">Your Health,<br>Our <span style="color: var(--accent);">Priority</span></h1>
+        <p class="hero-subtitle">Book appointments with the best doctors in Tashkent. Fast, reliable, and convenient healthcare at your fingertips.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{{ url_for('doctors') }}" class="btn btn-light btn-primary-custom" style="background: white; color: var(--primary);">
+            <i class="bi bi-search"></i> Find a Doctor
+          </a>
+          <a href="#services" class="btn btn-outline-custom">
+            Our Services <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-block text-center">
+        <div style="font-size: 12rem; opacity: 0.15; line-height: 1;">
+          <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="stat-card fade-in">
+          <span class="stat-icon">🏥</span>
+          <div class="stat-number" data-target="{{ total_doctors }}">0+</div>
+          <div class="stat-label">Expert Doctors</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card fade-in">
+          <span class="stat-icon">📋</span>
+          <div class="stat-number" data-target="{{ total_appointments }}">0+</div>
+          <div class="stat-label">Appointments Made</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card fade-in">
+          <span class="stat-icon">⭐</span>
+          <div class="stat-number" data-target="{{ total_specializations }}">0+</div>
+          <div class="stat-label">Specializations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="py-5 mt-5" id="services">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">What We Offer</span>
+      <h2 class="section-title">Our Medical Services</h2>
+      <p class="section-subtitle">Comprehensive healthcare services delivered by experienced professionals</p>
+    </div>
+    <div class="row g-4">
+      {% set services = [
+        ('bi-heart-pulse', 'Cardiology', 'Advanced heart care with modern diagnostic and treatment methods.'),
+        ('bi-lightning', 'Neurology', 'Expert neurological care for brain and nervous system disorders.'),
+        ('bi-emoji-smile', 'Pediatrics', 'Specialized care for infants, children, and adolescents.'),
+        ('bi-eye', 'Ophthalmology', 'Complete eye care including LASIK and cataract surgery.'),
+        ('bi-scissors', 'General Surgery', 'Expert surgical care with minimally invasive techniques.'),
+        ('bi-bandaid', 'Dermatology', 'Comprehensive skin care and cosmetic dermatology services.')
+      ] %}
+      {% for icon, title, desc in services %}
+      <div class="col-md-4 col-sm-6">
+        <div class="service-card slide-up" style="animation-delay: {{ loop.index * 0.1 }}s;">
+          <div class="service-icon"><i class="bi {{ icon }}"></i></div>
+          <h5 class="service-title">{{ title }}</h5>
+          <p class="service-desc">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED DOCTORS -->
+<section class="py-5" style="background: var(--gray-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Meet Our Team</span>
+      <h2 class="section-title">Featured Doctors</h2>
+      <p class="section-subtitle">Top-rated specialists ready to provide the best healthcare</p>
+    </div>
+    <div class="row g-4">
+      {% for doc in featured_doctors %}
+      <div class="col-lg-3 col-md-6">
+        <div class="doctor-card slide-up" style="animation-delay: {{ loop.index * 0.1 }}s;">
+          <img src="{{ doc.photo }}" alt="{{ doc.name }}" class="doctor-card-img">
+          <div class="doctor-card-body">
+            <span class="doctor-specialization">{{ doc.specialization }}</span>
+            <h5 class="doctor-name">{{ doc.name }}</h5>
+            <p class="doctor-bio">{{ doc.bio }}</p>
+            <div class="doctor-meta">
+              <span class="doctor-rating"><i class="bi bi-star-fill"></i> {{ doc.rating }}</span>
+              <span class="doctor-exp"><i class="bi bi-briefcase"></i> {{ doc.experience }} yrs</span>
+            </div>
+            <a href="{{ url_for('doctor_detail', doctor_id=doc.id) }}" class="btn btn-book w-100 mt-3">
+              View Profile <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="{{ url_for('doctors') }}" class="btn btn-primary-custom">
+        View All Doctors <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5">
+  <div class="container">
+    <div class="p-5 rounded-4 text-center text-white" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));">
+      <h2 class="fw-bold mb-3">Ready to Book Your Appointment?</h2>
+      <p class="mb-4 opacity-75">Find the right doctor and schedule your visit in just a few clicks.</p>
+      <a href="{{ url_for('doctors') }}" class="btn btn-light btn-lg fw-semibold px-5 rounded-3">
+        <i class="bi bi-calendar-check"></i> Book Now
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

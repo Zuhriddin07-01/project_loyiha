@@ -1,0 +1,81 @@
+{% extends 'admin/base_admin.html' %}
+{% block admin_title %}Dashboard{% endblock %}
+
+{% block admin_content %}
+<h2 class="fw-bold mb-4">Dashboard</h2>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-3">
+    <div class="admin-stat-card">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: var(--accent-light);"><i class="bi bi-people-fill fs-4 text-primary"></i></div>
+        <div>
+          <div class="admin-stat-number">{{ total_doctors }}</div>
+          <div class="admin-stat-label">Doctors</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="admin-stat-card">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #DBEAFE;"><i class="bi bi-calendar-check fs-4" style="color: #2563EB;"></i></div>
+        <div>
+          <div class="admin-stat-number">{{ total_appointments }}</div>
+          <div class="admin-stat-label">Total Bookings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="admin-stat-card">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #FEF3C7;"><i class="bi bi-hourglass-split fs-4" style="color: #D97706;"></i></div>
+        <div>
+          <div class="admin-stat-number">{{ pending_appointments }}</div>
+          <div class="admin-stat-label">Pending</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="admin-stat-card">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3" style="background: #D1FAE5;"><i class="bi bi-check-circle fs-4" style="color: #059669;"></i></div>
+        <div>
+          <div class="admin-stat-number">{{ confirmed_appointments }}</div>
+          <div class="admin-stat-label">Confirmed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECENT APPOINTMENTS -->
+<div class="admin-table">
+  <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+    <h5 class="fw-bold mb-0">Recent Appointments</h5>
+    <a href="{{ url_for('admin_appointments') }}" class="btn btn-sm btn-outline-primary rounded-3">View All</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for appt in recent_appointments %}
+        <tr>
+          <td class="fw-semibold">{{ appt.patient_name }}</td>
+          <td>{{ appt.doctor.name }}</td>
+          <td>{{ appt.date }}</td>
+          <td>{{ appt.time_slot }}</td>
+          <td><span class="badge badge-{{ appt.status }} rounded-pill px-3">{{ appt.status }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted py-4">No appointments yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

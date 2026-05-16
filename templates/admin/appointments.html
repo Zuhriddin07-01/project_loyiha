@@ -1,0 +1,61 @@
+{% extends 'admin/base_admin.html' %}
+{% block admin_title %}Appointments{% endblock %}
+
+{% block admin_content %}
+<h2 class="fw-bold mb-4">Manage Appointments</h2>
+
+<!-- Status Filters -->
+<div class="d-flex flex-wrap gap-2 mb-4">
+  {% set statuses = ['all','pending','confirmed','cancelled','completed'] %}
+  {% for s in statuses %}
+  <a href="{{ url_for('admin_appointments', status=s) }}"
+     class="filter-btn {{ 'active' if current_filter == s }}">{{ s|capitalize }}</a>
+  {% endfor %}
+</div>
+
+<div class="admin-table">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr><th>Patient</th><th>Phone</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for appt in appointments %}
+        <tr>
+          <td>
+            <strong>{{ appt.patient_name }}</strong>
+            <br><small class="text-muted">Age: {{ appt.patient_age }} | {{ appt.patient_gender }}</small>
+          </td>
+          <td>{{ appt.patient_phone }}</td>
+          <td>{{ appt.doctor.name }}<br><small class="text-muted">{{ appt.doctor.specialization }}</small></td>
+          <td>{{ appt.date }}</td>
+          <td>{{ appt.time_slot }}</td>
+          <td><span class="badge badge-{{ appt.status }} rounded-pill px-3">{{ appt.status }}</span></td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary rounded-2 dropdown-toggle" data-bs-toggle="dropdown">
+                Update
+              </button>
+              <ul class="dropdown-menu">
+                {% for st in ['pending','confirmed','cancelled','completed'] %}
+                {% if st != appt.status %}
+                <li>
+                  <form method="POST" action="{{ url_for('admin_update_status', appt_id=appt.id) }}">
+                    <input type="hidden" name="status" value="{{ st }}">
+                    <button type="submit" class="dropdown-item">{{ st|capitalize }}</button>
+                  </form>
+                </li>
+                {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No appointments found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

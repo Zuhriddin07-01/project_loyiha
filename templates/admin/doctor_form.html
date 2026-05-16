@@ -1,0 +1,67 @@
+{% extends 'admin/base_admin.html' %}
+{% block admin_title %}{{ action }} Doctor{% endblock %}
+
+{% block admin_content %}
+<div class="mb-4">
+  <a href="{{ url_for('admin_doctors') }}" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Back to Doctors</a>
+</div>
+<h2 class="fw-bold mb-4">{{ action }} Doctor</h2>
+
+<div class="admin-table p-4">
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label-custom">Full Name <span class="text-danger">*</span></label>
+        <input type="text" name="name" required class="form-control form-control-custom" value="{{ doctor.name if doctor else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label-custom">Specialization <span class="text-danger">*</span></label>
+        <input type="text" name="specialization" required class="form-control form-control-custom" value="{{ doctor.specialization if doctor else '' }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label-custom">Experience (years)</label>
+        <input type="number" name="experience" min="0" class="form-control form-control-custom" value="{{ doctor.experience if doctor else 0 }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label-custom">Rating (0-5)</label>
+        <input type="number" name="rating" min="0" max="5" step="0.1" class="form-control form-control-custom" value="{{ doctor.rating if doctor else 4.5 }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label-custom">Consultation Fee (UZS)</label>
+        <input type="number" name="consultation_fee" min="0" class="form-control form-control-custom" value="{{ doctor.consultation_fee if doctor else 0 }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label-custom">Phone</label>
+        <input type="text" name="phone" class="form-control form-control-custom" value="{{ doctor.phone if doctor else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label-custom">Email</label>
+        <input type="email" name="email" class="form-control form-control-custom" value="{{ doctor.email if doctor else '' }}">
+      </div>
+      <div class="col-12">
+        <label class="form-label-custom">Education</label>
+        <input type="text" name="education" class="form-control form-control-custom" value="{{ doctor.education if doctor else '' }}">
+      </div>
+      <div class="col-12">
+        <label class="form-label-custom">Bio</label>
+        <textarea name="bio" rows="3" class="form-control form-control-custom">{{ doctor.bio if doctor else '' }}</textarea>
+      </div>
+      <div class="col-12">
+        <label class="form-label-custom">Available Days</label>
+        <div class="d-flex flex-wrap gap-3 mt-1">
+          {% set days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] %}
+          {% set active_days = doctor.get_available_days_list() if doctor else [] %}
+          {% for day in days %}
+          <div class="form-check">
+            <input type="checkbox" name="available_days" value="{{ day }}" class="form-check-input"
+                   id="day{{ day }}" {{ 'checked' if day in active_days }}>
+            <label class="form-check-label" for="day{{ day }}">{{ day }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary-custom mt-4 px-5"><i class="bi bi-check-circle"></i> {{ action }} Doctor</button>
+  </form>
+</div>
+{% endblock %}

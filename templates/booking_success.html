@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed{% endblock %}
+
+{% block content %}
+<section class="success-container">
+  <div class="success-card fade-in">
+    <div class="success-icon"><i class="bi bi-check-lg"></i></div>
+    <h2 class="fw-bold mb-2">Appointment Booked!</h2>
+    <p class="text-muted mb-4">Your appointment has been successfully scheduled.</p>
+
+    <div class="text-start p-3 rounded-3 mb-4" style="background: var(--gray-50);">
+      <p class="mb-2"><strong><i class="bi bi-person-circle text-primary"></i> Doctor:</strong> {{ doctor.name }}</p>
+      <p class="mb-2"><strong><i class="bi bi-tag text-primary"></i> Specialization:</strong> {{ doctor.specialization }}</p>
+      <p class="mb-2"><strong><i class="bi bi-calendar text-primary"></i> Date:</strong> {{ appointment.date }}</p>
+      <p class="mb-2"><strong><i class="bi bi-clock text-primary"></i> Time:</strong> {{ appointment.time_slot }}</p>
+      <p class="mb-2"><strong><i class="bi bi-person text-primary"></i> Patient:</strong> {{ appointment.patient_name }}</p>
+      <p class="mb-0"><strong><i class="bi bi-info-circle text-primary"></i> Status:</strong>
+        <span class="badge badge-pending rounded-pill px-3">{{ appointment.status }}</span>
+      </p>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-center">
+      <a href="{{ url_for('home') }}" class="btn btn-primary-custom"><i class="bi bi-house"></i> Home</a>
+      <a href="{{ url_for('doctors') }}" class="btn btn-outline-secondary rounded-3 px-4">Book Another</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

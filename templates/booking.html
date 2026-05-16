@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Book Appointment - {{ doctor.name }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- LEFT: Doctor Info -->
+      <div class="col-lg-4">
+        <div class="detail-info-card mb-4">
+          <div class="text-center mb-3">
+            <img src="{{ doctor.photo }}" alt="{{ doctor.name }}" class="rounded-3" style="width:120px;height:120px;object-fit:cover;">
+          </div>
+          <h5 class="fw-bold text-center">{{ doctor.name }}</h5>
+          <p class="text-center"><span class="doctor-specialization">{{ doctor.specialization }}</span></p>
+          <hr>
+          <p class="small text-muted mb-1"><i class="bi bi-star-fill text-warning"></i> {{ doctor.rating }} Rating</p>
+          <p class="small text-muted mb-1"><i class="bi bi-briefcase"></i> {{ doctor.experience }} Years</p>
+          {% if doctor.consultation_fee %}
+          <p class="small text-muted mb-0"><i class="bi bi-cash"></i> {{ "{:,}".format(doctor.consultation_fee) }} UZS</p>
+          {% endif %}
+        </div>
+        <div class="detail-info-card">
+          <h6 class="fw-bold mb-2">Selected Appointment</h6>
+          <p class="mb-1 small"><strong>Date:</strong> <span id="selectedDateDisplay">Not selected</span></p>
+          <p class="mb-0 small"><strong>Time:</strong> <span id="selectedTimeDisplay">Not selected</span></p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Booking Form -->
+      <div class="col-lg-8">
+        <div class="booking-section">
+          <h3 class="fw-bold mb-4"><i class="bi bi-calendar-plus text-primary"></i> Book Appointment</h3>
+
+          <form method="POST" onsubmit="return validateBookingForm()">
+            <!-- Date Selection -->
+            <div class="mb-4">
+              <label class="form-label-custom">Select Date <span class="text-danger">*</span></label>
+              <input type="date" id="bookingDate" name="date" min="{{ today }}" required
+                     class="form-control form-control-custom"
+                     onchange="loadTimeSlots({{ doctor.id }}, this.value); document.getElementById('selectedDateDisplay').textContent=this.value;">
+            </div>
+
+            <!-- Time Slots -->
+            <div class="mb-4">
+              <label class="form-label-custom">Select Time <span class="text-danger">*</span></label>
+              <div id="timeSlotsContainer">
+                <div class="alert alert-info"><i class="bi bi-info-circle"></i> Please select a date first to see available times.</div>
+              </div>
+              <input type="hidden" id="selectedTimeSlot" name="time_slot" required>
+            </div>
+
+            <hr class="my-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-person text-primary"></i> Patient Information</h5>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label-custom">Full Name <span class="text-danger">*</span></label>
+                <input type="text" id="patientName" name="patient_name" required class="form-control form-control-custom" placeholder="Enter full name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-custom">Phone Number <span class="text-danger">*</span></label>
+                <input type="tel" id="patientPhone" name="patient_phone" required class="form-control form-control-custom" placeholder="+998 XX XXX XXXX">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-custom">Age <span class="text-danger">*</span></label>
+                <input type="number" id="patientAge" name="patient_age" min="0" max="150" required class="form-control form-control-custom" placeholder="Age">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-custom">Gender <span class="text-danger">*</span></label>
+                <select id="patientGender" name="patient_gender" required class="form-select form-control-custom">
+                  <option value="">Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label-custom">Notes / Problem Description</label>
+                <textarea name="notes" rows="3" class="form-control form-control-custom" placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary-custom w-100 mt-4 py-3">
+              <i class="bi bi-check-circle"></i> Confirm Booking
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
