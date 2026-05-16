@@ -184,11 +184,11 @@ def seed():
             db.session.commit()
             print(f'Created: {doctor.name} ({doctor.specialization})')
 
-        print(f'\n✅ Database seeded successfully!')
-        print(f'─────────────────────────────────')
+        print(f'\n[OK] Database seeded successfully!')
+        print(f'-----------------------------------')
         print(f'Admin Login: admin / admin123')
         print(f'Doctors: {len(DOCTORS)} created')
-        print(f'─────────────────────────────────')
+        print(f'-----------------------------------')
 
 
 if __name__ == '__main__':
